@@ -1,0 +1,20 @@
+#!/usr/bin/env ansible-playbook
+---
+
+#########################################
+## Controller Node Configuration
+- name: controller | Configure Controller Host
+  become: true
+  block:
+    # - name: controller | Configure Control Node
+    #   vars:
+    #     hostname: controller
+    #   include_tasks: host.yml
+
+    # - name: controller | Configure Control Node Networking
+    #   include_tasks: networking.yml
+
+    - name: controller | Setup Containers
+      include_tasks: containers.yml
+
+...

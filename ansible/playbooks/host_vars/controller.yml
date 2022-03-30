@@ -1,0 +1,53 @@
+---
+
+controller:
+  hostname: controller
+
+  iface:
+    eth0:
+      ipaddr:  10.0.0.1
+      subnet:  24
+      netmask: 255.255.255.0
+      gateway: 10.0.0.1
+
+  dhcp:
+    iface: eth0
+    network: 10.0.0.0
+    netmask: 255.255.255.0
+    router: 10.0.0.1
+    start: 10.0.0.2
+    end: 10.0.0.254
+    broadcast: 10.0.0.255
+    dns: 10.0.0.1
+    domain: cluster.local
+    lease_file: /srv/nfs/vars/dhcp.leases
+
+  containers:
+    # compose:
+    # containerfile:
+    # images:
+    nginx:
+      image: nginx:latest
+      ports:
+        - 80:80
+      volumes:
+        - /srv/containers/nginx:/usr/share/nginx/html
+      links:
+        - redis:redis
+      restart: always
+      command:
+        - nginx
+        - -g
+        - 'daemon off;'
+  # https://hub.docker.com/search?q=&type=image&architecture=arm64&category=application_services%2Ctools%2Cstorage
+  # https://hub.docker.com/r/knobik/rpicloud
+  # dnsmasq
+  #   https://hub.docker.com/r/jpillora/dnsmasq
+  #   https://hub.docker.com/r/ibmcom/kube-dnsmasq
+  # pxe
+  #   https://hub.docker.com/r/ferrarimarco/pxe
+  #   https://hub.docker.com/r/3x3cut0r/raspberrypi-netboot
+  #   https://hub.docker.com/r/linuxserver/netbootxyz
+
+
+...

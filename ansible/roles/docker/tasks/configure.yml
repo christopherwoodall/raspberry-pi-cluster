@@ -1,0 +1,29 @@
+#!/usr/bin/env ansible-playbook
+---
+
+#########################################
+## Configure Docker
+#########################################
+# https://docs.docker.com/engine/install/linux-postinstall/
+
+
+# - name: docker | Configure Docker Daemon
+#   template:
+#     src: daemon.json
+#     dest: /etc/docker/daemon.json
+#     owner: root
+#     group: root
+#     mode: 0644
+
+
+- name: docker | Bounce Docker service
+  service:
+    name: "{{ item }}"
+    state: restarted
+    enabled: yes
+  with_items:
+    - docker
+    - containerd
+
+
+...

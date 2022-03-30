@@ -1,0 +1,12 @@
+# {{ ansible_managed }}
+network:
+    version: 2
+    renderer: networkd
+    # Renderer can be 'networkd' or 'NetworkManager'
+    wifis:
+        wlan0:
+            access-points:
+                {{ wifi.ssid }}:
+                    password: {{ wifi.password }}
+            dhcp4: true
+            optional: true

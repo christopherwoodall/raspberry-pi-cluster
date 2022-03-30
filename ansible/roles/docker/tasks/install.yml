@@ -1,0 +1,125 @@
+#!/usr/bin/env ansible-playbook
+---
+
+- name: docker | Get Release Codename
+  command:  "lsb_release --codename --short"
+  register: release_codename
+
+- name: docker | Get Platform Architecture
+  command:  "dpkg --print-architecture"
+  register: platform_architecture
+
+- name: docker | Set facts about current platform
+  set_fact:
+    arch:     "{{ platform_architecture.stdout | default('amd64') }}"
+    codename: "{{ release_codename.stdout | default('focal') }}"
+  # when: ansible_distribution_release is not defined
+
+
+- name: docker | Install Dependencies
+  apt:
+    name: "{{item}}"
+    state: present
+    update_cache: yes
+  loop:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - gnupg
+    - gnupg-agent
+    - lsb-release
+    - software-properties-common
+
+
+- name: docker | Add Docker GPG key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+
+- name: docker | Verify Docker GPG key Fingerprint
+  apt_key:
+    id: 0EBFCD88
+    state: present
+
+
+- name: docker | Add Docker repository to apt
+  apt_repository:
+    repo: >
+      deb [arch={{ arch }}]
+      https://download.docker.com/linux/ubuntu
+      {{ codename }}
+      stable
+    state: present
+
+
+- name: docker | Install Docker
+  apt:
+    name: "{{item}}"
+    state: latest
+    update_cache: yes
+  loop:
+    - docker-ce
+    - docker-ce-cli
+    - docker-compose
+    - containerd.io
+
+
+- name: docker | Install Docker Extras
+  apt:
+    name: "{{item}}"
+    state: latest
+    update_cache: yes
+  loop:
+    - docker-ce-rootless-extras
+    - docker2aci
+
+
+- name: docker | Install Docker Compose
+  block:
+    - name: docker | Install Docker Compose with APT
+      apt:
+        name: docker-compose
+        state: latest
+        update_cache: yes
+  rescue:
+    - name: docker | Install Docker Compose with PIP
+      pip:
+        name: docker-compose
+    - name: docker | Install Docker Compose manually
+      get_url:
+        url : https://github.com/docker/compose/releases/latest/download/docker-$(uname -s)-$(uname -m)
+        dest: /usr/local/bin/docker-compose
+        mode: 'u+x,g+x'
+
+
+- name: docker | Install Docker Python Module
+  pip:
+    name: docker
+
+
+- name: docker | Create Docker group
+  group:
+    name: docker
+    state: present
+
+
+- name: docker | Add remote_user to `docker` group
+  user:
+    name: "{{ remote_user | default( ansible_env.USER ) }}"
+    group: "docker"
+    append: yes
+  when: remote_user is defined
+
+
+- name: docker | Start Docker service
+  service:
+    name: "{{ item }}"
+    state: restarted
+    # state: "{{ docker.start | ternary('restarted','stopped') }}"
+    enabled: yes
+  with_items:
+    - docker
+    - containerd
+
+...

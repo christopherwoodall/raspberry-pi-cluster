@@ -1,0 +1,16 @@
+#!/usr/bin/env ansible-playbook
+---
+
+- name: common | Set Hostname
+  hostname:
+    name: "{{ host.hostname }}"
+
+
+- name: common | Update /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    regexp: "^127.0.1.1\t.*$"
+    line: "127.0.1.1\t{{ host.hostname }}"
+    state: present
+
+...

@@ -1,0 +1,113 @@
+#!/usr/bin/env ansible-playbook
+---
+
+- name: common | Install common packages
+  apt:
+    pkg: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - ansible
+    #- apache2
+    - aptitude
+    - avahi-daemon
+    - avahi-discover
+    - avahi-utils
+    - bc
+    #- build-essential
+    - bzip2
+    - curl
+    - diffutils
+    #- dnsmasq
+    #- dnsutils
+    #- dos2unix
+    - fdupes
+    - ftp-ssl
+    - gawk
+    - gcc
+    - git
+    - gnupg
+    - grep
+    - gzip
+    - hostapd
+    - htop
+    - httping
+    - ipcalc
+    #- isc-dhcp-server
+    - iptables-persistent
+    - iw
+    - jq
+    - less
+    - lftp
+    #- libapache2-mod-php
+    - libnss-mdns
+    - lsof
+    - make
+    - mdns-scan
+    - nano
+    - nfs-common
+    - nfs-kernel-server
+    - nmap
+    - ntp
+    - openssl
+    #- p7zip
+    #- php
+    #- php-curl
+    #- php-xml
+    #- podman
+    - pv
+    #- pxelinux
+    - python3
+    - python3-pip
+    #- rar
+    - rpi-eeprom
+    - rsync
+    - screen
+    - smbclient
+    - software-properties-common
+    - sshfs
+    - sshpass
+    #- syslinux-common
+    #- syslinux-efi
+    - tar
+    - tcpdump
+    #- tftp
+    #- tftpd
+    #- tftpd-hpa
+    - tmux
+    - unzip
+    - vim
+    - wget
+    - whois
+    - wireless-tools
+    - wvdial
+    - xz-utils
+    - zip
+
+
+- name: packages | Check for available upgrades
+  command: '/usr/lib/update-notifier/apt-check --package-names'
+  register: upgrade_packages
+  changed_when: false
+
+
+- name: packages | Upgrade system
+  apt:
+    upgrade: safe
+    update_cache: true
+
+
+- name: packages | Check if reboot is required
+  stat:
+    path: /var/run/reboot-required
+    get_md5: no
+  register: reboot_file
+
+
+- name: packages | Reboot if required
+  reboot:
+    connect_timeout: 120
+  when: reboot_file.stat.exists == true
+
+
+...

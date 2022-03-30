@@ -1,0 +1,29 @@
+#!/usr/bin/env ansible-playbook
+---
+
+- name: "Control Node"
+  hosts: controller
+  gather_facts: true
+  pre_tasks:
+    - name: controller | Set Facts
+      set_fact:
+        host: "{{ controller }}"
+
+  roles:
+    # Common Roles
+    # - { role: common, become: true }
+    # - { role: docker, become: true }
+
+    # Controller Roles
+    - { role: controller, become: true }
+    #- { role: containers, become: true }
+
+  #tasks:
+
+  post_tasks:
+    - name: "Host Facts"
+      debug:
+        var: hostvars[inventory_hostname]
+        verbosity: 2
+
+...

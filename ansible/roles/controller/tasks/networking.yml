@@ -1,0 +1,92 @@
+#!/usr/bin/env ansible-playbook
+---
+
+########################################
+## Cloud Init
+- name: networking | Check for Cloud Init disable file
+  stat:
+    path: /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
+    get_md5: false
+  register: disable_file
+  ignore_errors: true
+
+- name: networking | Create Cloud Init disable file
+  lineinfile:
+    dest: /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
+    create: true
+    state:  present
+    line: |
+      network: {config: disabled}
+  when: disable_file.stat.exists == false
+
+- name: networking | Find Cloud Init configuration files
+  find:
+    paths: /etc/netplan
+    patterns: "*"
+  register: netplan_configs
+
+- name: networking | Remove Cloud Init configuration files
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  with_items: "{{ netplan_configs.files }}"
+
+
+##############################################
+## Configure Interfaces with Netplan
+# TODO: Ansible Vault, User Prompt... (?)
+- name: Load Private wifi Config
+  include_vars:
+    file: vars/__private__/wifi.yml
+    name: wifi
+
+- name: Copy Netplan Config
+  template:
+    src:   "{{ item }}"
+    dest:  "/etc/netplan/{{ item }}"
+    owner: root
+    group: root
+    mode:  0644
+    backup: yes
+  with_items:
+    - 01-netplan-eth0.yaml
+    - 02-netplan-wlan0.yaml
+
+- name: networking | Apply and reload new netplan configs
+  command: netplan apply
+
+- name: networking | Remove default route from eth0
+  command: |
+    ip route del default via {{ host.iface.eth0.ipaddr }} dev eth0
+
+
+##############################################
+## Disable IPv6
+- name: controller | Disable IPv6
+  sysctl:
+    name:   "{{ item }}"
+    value:  1
+    state:  present
+    reload: yes
+  with_items:
+    - net.ipv6.conf.all.disable_ipv6
+    - net.ipv6.conf.default.disable_ipv6
+    - net.ipv6.conf.lo.disable_ipv6
+
+
+##############################################
+## Enable "Routing" on Cluster Interface (eth0)
+- name: controller | Enable "Routing" on Cluster Interface (eth0)
+  sysctl:
+    name:   "{{ item }}"
+    value:  1
+    state:  present
+    reload: yes
+  with_items:
+    #- net.ipv4.ip_forward
+    - net.ipv4.conf.eth0.proxy_arp
+    - net.ipv4.conf.eth0.forwarding
+    - net.ipv4.conf.eth0.bootp_relay
+
+
+...

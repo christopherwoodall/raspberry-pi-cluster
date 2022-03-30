@@ -1,0 +1,89 @@
+#!/usr/bin/env ansible-playbook
+---
+
+- name: containers | Create directory for containers
+  file:
+    state: directory
+    path: /srv/containers/{{ item }}
+    mode: 0755
+  with_items:
+    - registry
+    - images
+
+- debug: var=host.containers
+
+# - name: containers | Create directory for containers
+#   file:
+#     state: directory
+#     path: /srv/containers/images/{{ item }}
+#     mode: 0755
+#   with_items:
+#     - compose
+#     - volumes
+
+
+#########################################
+## Containers
+# - name: containers | Pull Containers
+#   shell: >
+#     docker pull \
+#       --platform linux/arm64 \
+#       {{ item.name }}
+#   loop:
+#     - name: busybox:latest
+
+
+# - name: containers | Export container images
+#   shell: >
+#     docker save \
+#       --output /srv/containers/{{ item.name }}.tar \
+#       {{ item.name }}:{{item.tag}}
+#   loop:
+#     - name: busybox
+#       tag:  latest
+
+
+# - name: containers | Remove container images
+#   shell: >
+#     docker rmi $(docker images -aq)
+
+
+# - name: containers | Load container images
+#   shell: >
+#     docker load \
+#       --input /srv/containers/{{ item.name }}.tar
+#   loop:
+#     - name: busybox
+#       tag:  local
+
+
+# - name: containers | Run container images
+#   shell: >
+#     docker run \
+#       -d \
+#       --rm \
+#       --name {{ item.name }} \
+#       {{ item.name }}:{{item.tag}}
+#   loop:
+#     - name: busybox
+#       tag:  latest
+
+
+# NOTES
+#
+# https://hub.docker.com/r/jpillora/dnsmasq
+# https://www.redhat.com/sysadmin/container-images-ansible
+# https://docs.ansible.com/ansible/2.8/scenario_guides/guide_docker.html
+# https://docs.docker.com/registry/deploying/
+#
+# Get ID of all running containers
+# (docker ps -aq)
+# Stop all running containers
+# docker stop $(docker ps -aq)
+# Delete all running containers
+# docker rm $(docker ps -aq)
+#docker exec -it busybox /bin/sh
+#docker stop $(docker ps -aq); docker rm $(docker ps -aq); docker rmi $(docker images -aq)
+#docker run -d -v ~/data:/.data -v ~/backups:/nfs/backups --restart unless-stopped --privileged --network host knobik/rpicloud
+
+...

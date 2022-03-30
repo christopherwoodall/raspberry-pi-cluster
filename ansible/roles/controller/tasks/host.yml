@@ -1,0 +1,78 @@
+#!/usr/bin/env ansible-playbook
+---
+
+#########################################
+## Turn off Wifi Power Save Mode
+
+- name: controller | Copy Systemd Wifi Power Save Mode Service
+  copy:
+    src: wifi_powersave@.service
+    dest: /etc/systemd/system/wifi_powersave@.service
+    owner: root
+    group: root
+    mode: 0755
+    force: false
+
+- name: controller | Check if Wifi is in Power Save Mode
+  shell:
+    cmd: /sbin/iw dev wlan0 get power_save
+  register: wifi_powersave_mode
+
+- name: controller | Disable Wifi Power Save Mode
+  service:
+    name: wifi_powersave@off.service
+    enabled: true
+    daemon_reload: yes
+  when: wifi_powersave_mode.stdout is search( "off" )
+
+
+#########################################
+## MOUNTS / FILE SYSTEM
+- name: controller | Check if NFS disk is mounted
+  command:  mountpoint -q /srv
+  register: volume_stat
+  failed_when:  false
+  changed_when: false
+
+- name: controller | Create NFS mount
+  when: volume_stat.rc != 0
+  block:
+  - name: controller | Mount NFS Disk
+    mount:
+      src: LABEL=NFS
+      path: /srv
+      fstype: ext4
+      state: mounted
+
+  - name: controller | Set NFS Disk to Auto Mount
+    lineinfile:
+      path: /etc/fstab
+      backup: true
+      backrefs: true
+      regexp: ^/dev/sda1
+      line: "LABEL=NFS\t/srv\text4\tdefaults\t0\t0"
+      state: present
+
+
+#########################################
+##
+# - name: controller | Get swap status
+#   shell:
+#     cmd: cat /proc/swaps | wc -l
+#   register: swap_out
+
+# - name: controller |  Disable swap if enabled
+#   shell: |
+#     dphys-swapfile swapoff
+#     dphys-swapfile uninstall
+#     systemctl disable dphys-swapfile
+#     swapoff -a
+#   when: swap_out.stdout != "1"
+#   #when: ansible_swaptotal_mb > 0
+
+# - name: controller | Reboot Host
+#   reboot:
+#     connect_timeout: 120
+#   when: swap_out.stdout != "1"
+
+...

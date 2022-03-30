@@ -1,0 +1,17 @@
+#!/usr/bin/env ansible-playbook
+---
+
+- name: common | Common Configuration
+  become: true
+  block:
+    - name: common | Set Hostname
+      include_tasks: hostname.yml
+
+    - name: common | Set Timezone
+      include_tasks: timezone.yml
+
+    - name: common | Install Common Packages
+      include_tasks: packages.yml
+
+
+...
