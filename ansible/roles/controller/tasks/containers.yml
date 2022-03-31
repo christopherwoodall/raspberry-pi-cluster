@@ -4,23 +4,38 @@
 - name: containers | Create directory for containers
   file:
     state: directory
-    path: /srv/containers/{{ item }}
+    path: /srv/containers
     mode: 0755
-  with_items:
-    - registry
-    - images
 
-- debug: var=host.containers
+- name: containers | Copy Container Directory
+  synchronize:
+    src: "containers/"
+    dest: "/srv/containers"
+    archive: no
+    checksum: no
+    rsync_opts:
+      - "-avhPx"
 
-# - name: containers | Create directory for containers
-#   file:
-#     state: directory
-#     path: /srv/containers/images/{{ item }}
-#     mode: 0755
-#   with_items:
-#     - compose
-#     - volumes
+- name: containers | Get List of Containers
+  shell: "ls -1 /srv/containers"
+  # find:
+  #   paths: /srv/containers
+  #   patterns: "*"
+  register: container_list
 
+
+- name: containers | Build Containers
+  shell: |
+    docker build \
+      --compress \
+      --force-rm \
+      --platform=linux/arm64 \
+      --file Dockerfile \
+      --tag "{{ item }}-arm64" \
+    ./{{ item }}
+  with_items: "{{ container_list.stdout_lines }}"
+
+#docker run --privileged -d --rm -p 10.0.0.1:53:53 -p 10.0.0.1:67:67 -v /srv/containers/dnsmasq/config/:/config dnsmasq-arm64:latest
 
 #########################################
 ## Containers
@@ -71,19 +86,10 @@
 
 # NOTES
 #
-# https://hub.docker.com/r/jpillora/dnsmasq
 # https://www.redhat.com/sysadmin/container-images-ansible
 # https://docs.ansible.com/ansible/2.8/scenario_guides/guide_docker.html
 # https://docs.docker.com/registry/deploying/
 #
-# Get ID of all running containers
-# (docker ps -aq)
-# Stop all running containers
-# docker stop $(docker ps -aq)
-# Delete all running containers
-# docker rm $(docker ps -aq)
-#docker exec -it busybox /bin/sh
-#docker stop $(docker ps -aq); docker rm $(docker ps -aq); docker rmi $(docker images -aq)
-#docker run -d -v ~/data:/.data -v ~/backups:/nfs/backups --restart unless-stopped --privileged --network host knobik/rpicloud
+#iptables -t nat -I POSTROUTING -p all -s 172.20.128.2 ! -d 172.20.128.2 -j SNAT --to-source YourInterfaceIP
 
 ...

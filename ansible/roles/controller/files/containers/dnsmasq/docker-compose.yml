@@ -1,0 +1,21 @@
+version: '3.4'
+services:
+  dnsmasq:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "10.0.0.1:53:53/tcp"
+      - "10.0.0.1:53:53/udp"
+      - "10.0.0.1:67:67/udp"
+      #- "10.0.0.1:80:80/tcp"
+    environment:
+      USER_UID: ${USER_UID:-1000}
+      USER_GID: ${USER_GID:-1000}
+    volumes:
+      - ./config:/config
+    # network_mode: "host"
+    # privileged: true
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped

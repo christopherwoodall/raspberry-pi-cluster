@@ -1,0 +1,29 @@
+# base configuration
+FROM --platform=linux/arm64 ubuntu:latest as base
+
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV PUID=0
+ENV PGID=0
+
+
+RUN apt-get update && \
+    apt-get install -y \
+      build-essential cron \
+      software-properties-common sudo curl \
+      dnsmasq kpartx nfs-kernel-server && \
+    apt-get -y autoremove && \
+    apt-get clean
+
+
+RUN mkdir /config
+COPY config/start.sh /
+COPY config/start.sh /config/dnsmasq.conf
+RUN chmod -R 777 /start.sh /config
+
+
+EXPOSE 53 53/udp 67/udp
+VOLUME /config
+
+
+CMD ["/config/start.sh"]

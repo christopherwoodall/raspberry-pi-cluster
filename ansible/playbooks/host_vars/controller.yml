@@ -19,8 +19,12 @@ controller:
     end: 10.0.0.254
     broadcast: 10.0.0.255
     dns: 10.0.0.1
-    domain: cluster.local
     lease_file: /srv/nfs/vars/dhcp.leases
+
+  services:
+    dnsmasq:
+      router: 10.0.0.1
+      domain: cluster
 
   containers:
     # compose:
