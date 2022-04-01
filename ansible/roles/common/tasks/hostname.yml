@@ -6,6 +6,12 @@
     name: "{{ host.hostname }}"
 
 
+# - name: common | Update /etc/hosts
+#   template:
+#     src: cloud.cfg
+#     dest: /etc/cloud/cloud.cfg
+
+
 - name: common | Update /etc/hosts
   lineinfile:
     path: /etc/hosts
