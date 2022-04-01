@@ -24,18 +24,17 @@
   register: container_list
 
 
-- name: containers | Build Containers
-  shell: |
-    docker build \
-      --compress \
-      --force-rm \
-      --platform=linux/arm64 \
-      --file Dockerfile \
-      --tag "{{ item }}-arm64" \
-    ./{{ item }}
-  with_items: "{{ container_list.stdout_lines }}"
+# - name: containers | Build Containers
+#   shell: |
+#     docker build \
+#       --compress \
+#       --force-rm \
+#       --platform=linux/arm64 \
+#       --file Dockerfile \
+#       --tag "{{ item }}-arm64" \
+#     ./{{ item }}
+#   with_items: "{{ container_list.stdout_lines }}"
 
-#docker run --privileged -d --rm -p 10.0.0.1:53:53 -p 10.0.0.1:67:67 -v /srv/containers/dnsmasq/config/:/config dnsmasq-arm64:latest
 
 #########################################
 ## Containers

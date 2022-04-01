@@ -15,3 +15,5 @@ if [ ! $USERNAME ]; then
 fi
 
 dnsmasq -C /config/dnsmasq.conf -8 - -R -k 2>&1 | su $USERNAME -c 'tee -a /config/dnsmasq.log'
+
+# dnsmasq -q -d --conf-file=/config/dnsmasq.conf --dhcp-broadcast 2>&1 | su $USERNAME -c 'tee -a /config/dnsmasq.log'
