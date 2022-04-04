@@ -6,8 +6,8 @@ Run `make run` to kick off sensible in order to select relevant playbooks.
 
 
 # Deployment
-![screenshot](docs/screencast-1.gif)
+![screencast](docs/assets/screencast-deploy.gif)
 
 
 # Tools
-![screenshot](docs/screencast.gif)
+![screencast](docs/assets/screencast-tools.gif)
