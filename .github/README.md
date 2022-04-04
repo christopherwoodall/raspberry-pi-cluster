@@ -1,5 +1,3 @@
-# Raspberry Pi Cluster
-## *Under Development*
 <p align="center">
   <br>
   <h1>
