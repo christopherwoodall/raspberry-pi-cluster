@@ -16,7 +16,7 @@
   <a href="#about">About</a> •
   <a href="#installation">Installation</a> •
   <a href="#features">Features</a> •
-  <a href="#binds">Demo</a> •
+  <a href="#demo">Demo</a> •
 
 
 ---
