@@ -1,11 +1,11 @@
-<p align="center">
+<p>
   <br>
-  <h1>
+  <h1 align="center">
     <a href="https://github.com/christopherwoodall/raspberry-pi-cluster">
       RPi Cluster
     </a>
   </h1>
-  <h3>
+  <h3 align="center">
     Under Construction
   </h3>
 </p>
