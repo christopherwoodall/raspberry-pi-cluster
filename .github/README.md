@@ -10,7 +10,7 @@
   </h3>
 </p>
 
-<h4 align="center">Tools for setting up a cluster of Raspberry Pis.</h4>
+<h4 align="center">Tools for Deploying a Raspberry Pi Cluster.</h4>
 
 <p align="center">
   <a href="#about">About</a> •
