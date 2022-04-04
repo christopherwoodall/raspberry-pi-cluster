@@ -14,7 +14,5 @@
     - name: controller | Configure Control Node Networking
       include_tasks: networking.yml
 
-    - name: controller | Setup Containers
-      include_tasks: containers.yml
 
 ...

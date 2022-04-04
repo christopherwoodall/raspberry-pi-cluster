@@ -1,0 +1,12 @@
+#!/usr/bin/env ansible-playbook
+---
+
+#########################################
+## dnsmasq Configuration
+- name: dnsmasq | Configure dnsmasq
+  become: true
+  block:
+    - name: dnsmasq | Setup Container
+      include_tasks: dnsmasq.yml
+
+...
