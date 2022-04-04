@@ -1,0 +1,9 @@
+#!/usr/bin/env ansible-playbook
+---
+
+#########################################
+## Add Node as Host
+- debug: var=discovered_nodes
+
+
+...
