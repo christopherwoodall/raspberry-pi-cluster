@@ -34,11 +34,10 @@ help: ## List commands
 -	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\t\033[36m%-20s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 
-.PHONY: controller
-controller:	## Run the Ansible Playbook to deploy a Controller
+.PHONY: run
+run:	## Run sensible and choose which playbooks to run
 -	@echo "Running Controller Playbook..."
--	@cd $(ANSIBLE_DIR)
--	@ansible-playbook playbooks/controller.yml
+-	@python3 sensible.py --dir=ansible
 
 
 .PHONY: step
@@ -46,10 +45,6 @@ step:	## Run Ansible Playbooks with --step
 -	@echo "Stepping through playbook..."
 -	@cd $(ANSIBLE_DIR)
 -	@ansible-playbook --step playbooks/controller.yml
-
-
-# .PHONY: controller
-# controller:	## Run the Ansible Playbooks to deploy the controller
 
 
 .PHONY: lint
