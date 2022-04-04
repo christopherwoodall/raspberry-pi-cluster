@@ -1,0 +1,13 @@
+#!/usr/bin/env ansible-playbook
+---
+
+### sensible ###
+# - name: Cluster Deployment
+# - description: |
+#     Plays used to deploy the cluster.
+# - index: 0
+# - tags:
+#   - seperator
+### /sensible ###
+
+...

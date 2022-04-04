@@ -1,6 +1,18 @@
 #!/usr/bin/env ansible-playbook
 ---
 
+### sensible ###
+# - name: Controller
+# - description: >
+#     Run the controller playbook.
+# - index: 1
+# - vars:
+#   - config: /path/to/config.yml
+#   - inventory: /path/to/inventory.yml
+# - tags:
+#   - controller
+### /sensible ###
+
 - name: "Control Node"
   hosts: controller
   gather_facts: true
@@ -11,12 +23,12 @@
 
   roles:
     # Common Roles
-    # - { role: common, become: true }
-    # - { role: docker, become: true }
+    - { role: common, become: true }
+    - { role: docker, become: true }
 
     # Controller Roles
     - { role: controller, become: true }
-    #- { role: containers, become: true }
+    - { role: dnsmasq, become: true }
 
   #tasks:
 
