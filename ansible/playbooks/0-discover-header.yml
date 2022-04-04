@@ -2,9 +2,10 @@
 ---
 
 ### sensible ###
-# - name: Cluster Deployment
+# - name: Discover
 # - description: |
-#     Plays used to deploy the cluster.
+#     Locate intended cluster nodes on your network
+#     and add them to the inventory.
 # - index: 0
 # - tags:
 #   - seperator
