@@ -1,5 +1,37 @@
 #!/usr/bin/env ansible-playbook
 ---
 
+#########################################
+## Network Scan
+- name: Set Fact
+  set_fact:
+    network: "{{ controller.dhcp.network }}"
+
+- name: Remove last octet
+  set_fact:
+    ip_prefix: "{{network.split('.')[0]}}.{{network.split('.')[1]}}.{{network.split('.')[2]}}"
+
+- name: Scan Network
+  shell: |
+    NETWORK={{ item }}
+    for i in {1..254} ; do
+      TARGET="${NETWORK%.*}.$i"
+      ( ping "${TARGET}" -c 2 -W 1 -I {{ controller.dhcp.iface }} > /dev/null ) &
+    done
+  ignore_errors: true
+  with_items:
+    - "{{ ip_prefix }}"
+
+
+- name: Search ARP Table
+  shell: |
+    PI_OUI="b8:27:eb|dc:a6:32|e4:5f:01|28:cd:c1"
+    ip n | egrep "${PI_OUI}" | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}'
+  ignore_errors: true
+  changed_when: true
+  register: arp_table
+
+- debug: msg="{{ arp_table.stdout }}"
+
 
 ...

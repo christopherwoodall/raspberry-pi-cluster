@@ -30,7 +30,13 @@
     - { role: controller, become: true }
     - { role: dnsmasq, become: true }
 
-  #tasks:
+
+  tasks:
+    - name: controller | Scan for connected Hosts
+      import_role:
+        name: discover
+        tasks_from: main.yml
+
 
   post_tasks:
     - name: "Host Facts"
