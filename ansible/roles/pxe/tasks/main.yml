@@ -1,0 +1,10 @@
+#!/usr/bin/env ansible-playbook
+---
+
+#########################################
+##
+- name:
+  include_tasks: task.yml
+
+
+...
