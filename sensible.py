@@ -167,16 +167,6 @@ class Sensible:
   def generate_list_item(self, window, item, index, max_x):
     highlight = self.WHITE
 
-    # Check if selection is a seperator
-    if 'seperator' in item['tags']:
-      highlight = self.DIM_MAGENTA
-      if index == self.position:
-        highlight = self.MAGENTA
-      padding = self.center_text(item['name'], max_x)
-      window.addstr((index + 2), 2, f"{'-' * (max_x - 4)}", highlight)
-      window.addstr((index + 2), (padding - 2), f" {item['name']} ", highlight)
-      return
-
     if item['selected']:
       highlight =  self.GREEN
 
@@ -184,7 +174,25 @@ class Sensible:
       if not item['selected']:
         highlight = self.DIM_BLUE
       window.addstr((index + 2), 2, f"> ", highlight)
+
+    # Check if selection is a seperator
+    if 'seperator' in item['tags']:
+      highlight = self.DIM_MAGENTA
+      if index == self.position:
+        highlight = self.MAGENTA
+      padding = self.center_text(item['name'], max_x)
+      window.addstr((index + 2), 4, f"{'-' * (max_x - 6)}", highlight)
+      window.addstr((index + 2), (padding - 2), f" {item['name']} ", highlight)
+      return
+
+    # Check if selection is 'work in progress'
+    if 'wip' in item['tags']:
+      highlight = self.DIM_RED
+      if index == self.position:
+        highlight = self.RED
+
     window.addstr((index + 2), 4, f"{item['name']}", highlight)
+
 
   ############
   #
@@ -216,13 +224,21 @@ class Sensible:
     max_y = (self.get_height() -2)
     window = self.create_window(max_y, max_x, 1, cols)
     cur_selection = self.options[self.position]
-    content = [ f"Name: {cur_selection['name']}" ]
+    content = self.slice_text(
+      f"Name: {cur_selection['name']}",
+            max_x,
+      4
+    )
     content += self.slice_text(
       f"Description: {cur_selection['description']}",
       max_x,
       4
     )
-    content += [ f"Tags: {', '.join(cur_selection['tags'])}" ]
+    content += self.slice_text(
+      f"Tags: {', '.join(cur_selection['tags'])}",
+            max_x,
+      4
+    )
     for i, line in enumerate(content):
       window.addstr((i + 2), 2, f"{line}", self.DIM_CYAN)
     panel = curses.panel.new_panel(window)
