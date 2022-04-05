@@ -5,7 +5,7 @@
 # - name: Discover Controller
 # - description: >
 #     Scan your network to find the controller node.
-# - index: 1
+# - index: 11
 # - tags:
 #   - discover
 #   - controller

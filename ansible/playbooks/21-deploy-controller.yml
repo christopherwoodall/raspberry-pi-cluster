@@ -5,7 +5,7 @@
 # - name: Controller
 # - description: >
 #     Run the controller playbook.
-# - index: 11
+# - index: 21
 # - vars:
 #   - config: /path/to/config.yml
 #   - inventory: /path/to/inventory.yml

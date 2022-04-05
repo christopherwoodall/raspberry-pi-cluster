@@ -2,10 +2,10 @@
 ---
 
 ### sensible ###
-# - name: Deploy
+# - name: Manage
 # - description: |
-#     Plays used to deploy the cluster.
-# - index: 10
+#     Manage the enviroment.
+# - index: 30
 # - tags:
 #   - seperator
 ### /sensible ###

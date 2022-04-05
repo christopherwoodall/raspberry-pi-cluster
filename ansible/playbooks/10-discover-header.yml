@@ -1,0 +1,14 @@
+#!/usr/bin/env ansible-playbook
+---
+
+### sensible ###
+# - name: Discover
+# - description: |
+#     Locate intended cluster nodes on your network
+#     and add them to the inventory.
+# - index: 10
+# - tags:
+#   - seperator
+### /sensible ###
+
+...

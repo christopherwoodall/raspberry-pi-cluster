@@ -2,10 +2,10 @@
 ---
 
 ### sensible ###
-# - name: Discover
+# - name: Setup
 # - description: |
-#     Locate intended cluster nodes on your network
-#     and add them to the inventory.
+#     Tasks that need to be ran in order to
+#     prepare the enviroment.
 # - index: 0
 # - tags:
 #   - seperator
