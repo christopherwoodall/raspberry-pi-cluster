@@ -16,14 +16,17 @@
 - name: "Control Node"
   hosts: controller
   gather_facts: true
+
   pre_tasks:
     - name: controller | Set Facts
       set_fact:
         host: "{{ controller }}"
 
+
   roles:
     # Common Roles
     - { role: common, become: true }
+    - { role: disable-swap, become: true }
     - { role: docker, become: true }
 
     # Controller Roles
