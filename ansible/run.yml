@@ -1,0 +1,22 @@
+#!/usr/bin/env ansible-playbook
+---
+
+- name: Launch Setup
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    sensible_path: "{{ playbook_dir }}/scripts/sensible.py"
+    playbook_path: "{{ playbook_dir }}"
+
+  tasks:
+    - name: Launch Sensible
+      raw: |
+        {{ ansible_playbook_python }} \
+          {{ sensible_path }} \
+          --dir={{ playbook_path }} \
+          </dev/tty >/dev/tty 2>/dev/tty
+
+
+...

@@ -15,7 +15,7 @@ endif
 
 #########################################
 ## Setup
-.DEFAULT_GOAL := help
+.DEFAULT_GOAL := run
 
 ANSIBLE_DIR := $(shell pwd)/ansible
 SENSIBLE_DIR := $(ANSIBLE_DIR)/scripts
@@ -24,7 +24,7 @@ ROLES_DIR := $(ANSIBLE_DIR)/roles
 
 #########################################
 ## Recipes
-default: help
+default: $(.DEFAULT_GOAL)
 all: help
 
 
