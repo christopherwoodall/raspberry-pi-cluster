@@ -6,9 +6,6 @@
 # - description: >
 #     Run the controller playbook.
 # - index: 21
-# - vars:
-#   - config: /path/to/config.yml
-#   - inventory: /path/to/inventory.yml
 # - tags:
 #   - controller
 ### /sensible ###

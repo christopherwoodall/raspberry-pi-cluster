@@ -6,9 +6,6 @@
 # - description: >
 #     Scan the cluster network for nodes.
 # - index: 31
-# - vars:
-#   - config: /path/to/config.yml
-#   - inventory: /path/to/inventory.yml
 # - tags:
 #   - controller
 #   - manage

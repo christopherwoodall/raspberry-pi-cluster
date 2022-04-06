@@ -7,9 +7,6 @@
 #     After dd'ing the Ubuntu image to an SD Card,0
 #     run this play to make minor patches.
 # - index: 83
-# - vars:
-#   - config: /path/to/config.yml
-#   - inventory: /path/to/inventory.yml
 # - tags:
 #   - controller
 ### /sensible ###
