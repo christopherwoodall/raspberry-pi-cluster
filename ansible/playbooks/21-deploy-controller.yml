@@ -25,8 +25,9 @@
 
   roles:
     # Common Roles
-    - { role: common, become: true }
     - { role: disable-swap, become: true }
+    - { role: enable-cgroup, become: true }
+    - { role: common, become: true }
     - { role: docker, become: true }
 
     # Controller Roles
