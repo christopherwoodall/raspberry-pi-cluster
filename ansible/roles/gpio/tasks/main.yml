@@ -1,0 +1,8 @@
+#!/usr/bin/env ansible-playbook
+---
+
+
+# TODO
+# https://github.com/geerlingguy/raspberry-pi-dramble/tree/master/roles/leds-gpio/templates
+
+...
