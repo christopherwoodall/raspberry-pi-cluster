@@ -16,7 +16,6 @@
 
 - name: Network Scan
   hosts: controller
-  connection: local
   gather_facts: false
 
   vars:
