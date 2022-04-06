@@ -18,6 +18,7 @@ endif
 .DEFAULT_GOAL := help
 
 ANSIBLE_DIR := $(shell pwd)/ansible
+SENSIBLE_DIR := $(ANSIBLE_DIR)/scripts
 ROLES_DIR := $(ANSIBLE_DIR)/roles
 
 
@@ -37,14 +38,14 @@ help: ## List commands
 .PHONY: run
 run:	## Run sensible and choose which playbooks to run
 -	@echo "Running Controller Playbook..."
--	@python3 sensible.py --dir=ansible
+-	@python3 $(SENSIBLE_DIR)/sensible.py --dir=$(ANSIBLE_DIR)
 
 
-.PHONY: step
-step:	## Run Ansible Playbooks with --step
--	@echo "Stepping through playbook..."
--	@cd $(ANSIBLE_DIR)
--	@ansible-playbook --step playbooks/controller.yml
+# .PHONY: step
+# step:	## Run Ansible Playbooks with --step
+# -	@echo "Stepping through playbook..."
+# -	@cd $(ANSIBLE_DIR)
+# -	@ansible-playbook --step playbooks/controller.yml
 
 
 .PHONY: lint
