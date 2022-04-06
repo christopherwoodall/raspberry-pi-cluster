@@ -23,10 +23,17 @@
 
 ## About
 
-Run `make run` to kick off sensible in order to select relevant playbooks.
+This project contains a series of Ansible Playbooks, as well as BASH, Python, and other relevant tools to kick off the deployment of a Raspberry Pi cluster.
 
 
 ## Installation
+
+There are two ways to get started. The first is by running `make` in the root directory of this project, or you can:
+```
+cd ansible
+chmod +x run.yml
+./run0.yml
+```
 
 
 ## Features
