@@ -1,0 +1,34 @@
+#!/usr/bin/env ansible-playbook
+---
+
+#########################################
+## Disable Swap
+##   - See https://raspberrypi.stackexchange.com/q/84390/6506
+
+- name: disable-swap | Get swap status
+  shell:
+    cmd: cat /proc/swaps | wc -l
+    #cmd: swapon --noheadings
+    #cmd: grep -Po 'SwapTotal:\s*\K([0-9]*\skB)' <<< cat /proc/meminfo
+  register: swap_out
+
+
+- name: disable-swap |  Disable swap if enabled
+  shell: |
+    dphys-swapfile swapoff
+    dphys-swapfile uninstall
+    swapoff -a
+    systemctl disable dphys-swapfile
+  #  update-rc.d -f dphys-swapfile remove
+  when:
+    - swap_out.stdout != "1"
+    # - ansible_swaptotal_mb > 0
+
+- name: disable-swap | Reboot Host
+  reboot:
+    connect_timeout: 120
+  when: swap_out.stdout != "1"
+
+...
+
+

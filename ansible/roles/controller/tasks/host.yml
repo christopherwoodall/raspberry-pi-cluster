@@ -53,26 +53,4 @@
       line: "LABEL=NFS\t/srv\text4\tdefaults\t0\t0"
       state: present
 
-
-#########################################
-##
-# - name: controller | Get swap status
-#   shell:
-#     cmd: cat /proc/swaps | wc -l
-#   register: swap_out
-
-# - name: controller |  Disable swap if enabled
-#   shell: |
-#     dphys-swapfile swapoff
-#     dphys-swapfile uninstall
-#     systemctl disable dphys-swapfile
-#     swapoff -a
-#   when: swap_out.stdout != "1"
-#   #when: ansible_swaptotal_mb > 0
-
-# - name: controller | Reboot Host
-#   reboot:
-#     connect_timeout: 120
-#   when: swap_out.stdout != "1"
-
 ...
