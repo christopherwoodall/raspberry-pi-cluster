@@ -2,11 +2,11 @@
 ---
 
 ### sensible ###
-# - name: Scan Cluster Network
-# - description: >
+# name: Scan Cluster Network
+# description: >
 #     Scan the cluster network for nodes.
-# - index: 31
-# - tags:
+# index: 31
+# tags:
 #   - controller
 #   - manage
 ### /sensible ###

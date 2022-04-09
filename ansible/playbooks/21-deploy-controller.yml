@@ -2,11 +2,11 @@
 ---
 
 ### sensible ###
-# - name: Controller
-# - description: >
+# name: Controller
+# description: >
 #     Run the controller playbook.
-# - index: 21
-# - tags:
+# index: 21
+# tags:
 #   - controller
 ### /sensible ###
 

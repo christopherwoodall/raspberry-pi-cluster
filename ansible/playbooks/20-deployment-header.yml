@@ -2,11 +2,11 @@
 ---
 
 ### sensible ###
-# - name: Deploy
-# - description: |
+# name: Deploy
+# description: |
 #     Plays used to deploy the cluster.
-# - index: 20
-# - tags:
+# index: 20
+# tags:
 #   - seperator
 ### /sensible ###
 

@@ -2,15 +2,15 @@
 ---
 
 ### sensible ###
-# - name: Scan Network
-# - description: >
+# name: Scan Network
+# description: >
 #     Scan your local network to find possible
 #     Raspberry Pis.
-# - index: 81
-# - vars:
+# index: 81
+# vars:
 #   - config: /path/to/config.yml
 #   - inventory: /path/to/inventory.yml
-# - tags:
+# tags:
 #   - controller
 ### /sensible ###
 

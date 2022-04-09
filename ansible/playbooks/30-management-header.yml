@@ -2,11 +2,11 @@
 ---
 
 ### sensible ###
-# - name: Manage
-# - description: |
+# name: Manage
+# description: |
 #     Manage the enviroment.
-# - index: 30
-# - tags:
+# index: 30
+# tags:
 #   - seperator
 ### /sensible ###
 

@@ -52,7 +52,7 @@ class Sensible:
 
     curses.wrapper(self.run)
     if self.run_plays:
-      self.run_playbooks()
+     self.run_playbooks()
 
 
   ############
@@ -85,7 +85,7 @@ class Sensible:
     files = [ f for f in Path(playbook_dir).iterdir()
       if f.is_file() and f.suffix in ['.yml', '.yaml'] ]
     for f in files:
-      parsed = self.parse_playbook(f)
+      parsed = self.build_metadata(f)
       if parsed:
         parsed['path'] = str(f)
         parsed['selected'] = False
@@ -95,29 +95,66 @@ class Sensible:
           playbooks.append(parsed)
     playbooks = list(filter(None, playbooks))
     if not playbooks:
-      print("[!] No playbooks found")
-      sys.exit(1)
+      raise OSError(f"[!] No playbooks found in {playbook_dir}")
     return ['options', playbooks]
 
-  def parse_playbook(self, playbook_path):
-    start_pattern = '### sensible ###'
-    end_pattern   = '### /sensible ###'
-    content = Path(playbook_path).read_text()
-    if start_pattern in content and end_pattern in content:
-      header_str = content.partition(end_pattern)[0].rpartition(start_pattern)[2]
-      header_str = header_str.translate({ord(c): None for c in '!@#$'})
-      header_yaml = yaml.load(header_str, Loader=yaml.SafeLoader)
-      header = dict((key, val) for k in header_yaml for key, val in k.items())
-      return header
-    return False
+  def build_metadata(self, playbook_path):
+      content  = Path(playbook_path).read_text()
+      header   = self.extract_header(content)
+      if not header:
+          # TODO - Just pass it to ansible-playbook?
+          print("[!] Not a sensible playbook")
+          sys.exit(1)
+      playbook = self.parse_playbook(content)
+      metadata = {**header, **playbook}
+      header['path'] = playbook_path
+      header['selected'] = False
+      return metadata
+
+  def extract_header(self, content):
+      """
+      Extracts the sensible header from a playbook.
+      """
+      start_pattern = '### sensible ###'
+      end_pattern   = '### /sensible ###'
+      if start_pattern in content and end_pattern in content:
+          extracted = content.partition(end_pattern)[0].rpartition(start_pattern)[2]
+          extracted = extracted.replace("#", "")
+          return yaml.load(extracted, Loader=yaml.SafeLoader)
+      return False
+
+  def parse_playbook(self, content):
+      data = {
+          'hosts':      str(),
+          #'pre_tasks':  list(),
+          'roles':      list(),
+          'tasks':      list(),
+          #'post_tasks': list(),
+      }
+      try:
+        playbook = yaml.load(content, Loader=yaml.SafeLoader)[0]
+      except:
+        return data
+      keys = playbook.keys()
+      if 'hosts' in keys: data['hosts'] = playbook['hosts']
+      for key in data.keys():
+          if key in keys:
+              if key == 'hosts':
+                  data[key] = playbook[key]
+              elif key == 'tasks':
+                  data[key] = [task['name'] for task in playbook[key] if 'name' in task]
+              elif key == 'roles':
+                  data[key] = [task['role'] for task in playbook[key] if 'role' in task]
+      return data
+
 
   def run_playbooks(self):
     for option in self.options:
       ansible_cmd  = [ f"cd {self.dir} &&" ]
       ansible_cmd += [ f"ansible-playbook" ]
       if option['selected']:
-        # if 'vars' in option.keys():
-        #   print(option['vars'])
+        if 'vars' in option.keys():
+          ansible_cmd += option['vars']
         playbook_path = option['path']
         ansible_cmd += [ f"playbooks/{playbook_path.split('/')[-1]}" ]
         os.system(' '.join(ansible_cmd))
@@ -224,21 +261,16 @@ class Sensible:
     max_y = (self.get_height() -2)
     window = self.create_window(max_y, max_x, 1, cols)
     cur_selection = self.options[self.position]
-    content = self.slice_text(
-      f"Name: {cur_selection['name']}",
-            max_x,
-      4
-    )
-    content += self.slice_text(
-      f"Description: {cur_selection['description']}",
-      max_x,
-      4
-    )
-    content += self.slice_text(
-      f"Tags: {', '.join(cur_selection['tags'])}",
-            max_x,
-      4
-    )
+    fields  = ['name', 'description', 'hosts', 'roles', 'tasks', 'tags']
+    content = []
+    for field in fields:
+      if field in cur_selection.keys():
+        value = cur_selection[field]
+        if type(value) == list:
+          value = ', '.join(value)
+        line = f"{field.capitalize()}: {value}"
+        content += self.slice_text(line, max_x, 4)
+
     for i, line in enumerate(content):
       window.addstr((i + 2), 2, f"{line}", self.DIM_CYAN)
     panel = curses.panel.new_panel(window)

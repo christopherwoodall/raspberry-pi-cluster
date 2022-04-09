@@ -2,12 +2,12 @@
 ---
 
 ### sensible ###
-# - name: Discover
-# - description: |
+# name: Discover
+# description: |
 #     Locate intended cluster nodes on your network
 #     and add them to the inventory.
-# - index: 10
-# - tags:
+# index: 10
+# tags:
 #   - seperator
 ### /sensible ###
 

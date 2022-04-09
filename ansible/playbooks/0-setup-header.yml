@@ -2,12 +2,12 @@
 ---
 
 ### sensible ###
-# - name: Setup
-# - description: |
-#     Tasks that need to be ran in order to
-#     prepare the enviroment.
-# - index: 0
-# - tags:
+# name: Setup
+# description: |
+#   Tasks that need to be ran in order to
+#   prepare the enviroment.
+# index: 0
+# tags:
 #   - seperator
 ### /sensible ###
 

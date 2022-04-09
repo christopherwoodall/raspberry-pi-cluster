@@ -2,11 +2,11 @@
 ---
 
 ### sensible ###
-# - name: Discover Controller
-# - description: >
+# name: Discover Controller
+# description: >
 #     Scan your network to find the controller node.
-# - index: 11
-# - tags:
+# index: 11
+# tags:
 #   - discover
 #   - controller
 #   - wip

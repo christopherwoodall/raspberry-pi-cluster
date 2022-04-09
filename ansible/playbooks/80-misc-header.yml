@@ -2,11 +2,11 @@
 ---
 
 ### sensible ###
-# - name: Misc. Tools
-# - description: |
+# name: Misc. Tools
+# description: |
 #     Misc Tools
-# - index: 80
-# - tags:
+# index: 80
+# tags:
 #   - seperator
 ### /sensible ###
 

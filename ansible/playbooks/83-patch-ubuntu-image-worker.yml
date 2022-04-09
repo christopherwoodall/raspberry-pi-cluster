@@ -2,12 +2,12 @@
 ---
 
 ### sensible ###
-# - name: Patch Worker Ubuntu Image (RPi3)
-# - description: >
+# name: Patch Worker Ubuntu Image (RPi3)
+# description: >
 #     After dd'ing the Ubuntu image to an SD Card,0
 #     run this play to make minor patches.
-# - index: 83
-# - tags:
+# index: 83
+# tags:
 #   - controller
 ### /sensible ###
 
